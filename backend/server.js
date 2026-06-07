@@ -1,0 +1,42 @@
+import express from 'express';
+import dotenv from 'dotenv';
+import cors from 'cors';
+import path from 'path';
+import connectDB from './config/db.js';
+import { errorHandler } from './middleware/errorMiddleware.js';
+
+import authRoutes from './routes/authRoutes.js';
+import quizRoutes from './routes/quizRoutes.js';
+import analyticsRoutes from './routes/analyticsRoutes.js';
+import uploadRoutes from './routes/uploadRoutes.js';
+
+// Load env vars
+dotenv.config();
+
+// Connect to database
+connectDB();
+
+const app = express();
+
+// Body parser
+app.use(express.json());
+
+// Enable CORS
+app.use(cors());
+
+// Mount routers
+app.use('/api/auth', authRoutes);
+app.use('/api/quizzes', quizRoutes);
+app.use('/api/analytics', analyticsRoutes);
+app.use('/api/upload', uploadRoutes);
+
+const __dirname = path.resolve();
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
+
+app.use(errorHandler);
+
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+});
