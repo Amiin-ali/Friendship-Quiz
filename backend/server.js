@@ -23,6 +23,8 @@ app.use(express.json());
 
 // Enable CORS
 app.use(cors());
+// Ensure OPTIONS preflight requests return CORS headers
+app.options('*', cors());
 
 // Mount routers
 app.use('/api/auth', authRoutes);
