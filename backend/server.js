@@ -30,6 +30,11 @@ app.use('/api/quizzes', quizRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/upload', uploadRoutes);
 
+// Simple health check for the API root
+app.get('/api', (req, res) => {
+	res.json({ status: 'ok', message: 'API is running' });
+});
+
 const __dirname = path.resolve();
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
